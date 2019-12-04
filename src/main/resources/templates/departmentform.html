@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<h2>Department Form</h2>
+<div><form action="#" th:action="@{/process}" th:object="${department}" method="post"
+           enctype="multipart/form-data" class="custom">
+    <input type="hidden" th:field="*{id}" />
+    <!--            <input type="hidden" th:field="*{image}" />-->
+    <input type="hidden" th:field="*{id}" />
+    <span th:if="${#fields.hasErrors('id')}"
+          th:errors="*{id}"></span>
+    Name :<input class="form-control" type="text" th:field="*{name}"/>
+    <span th:if="${#fields.hasErrors('name')}"
+          th:errors="*{name}"></span><br />
+    Industry :<input class="form-control" type="text" th:field="*{industry}" />
+    <span th:if="${#fields.hasErrors('industry')}"
+          th:errors="*{industry}"></span><br />
+    Location :<input class="form-control" type="text" th:field="*{location}" />
+    <span th:if="${#fields.hasErrors('location')}"
+          th:errors="*{location}"></span><br />
+
+    User:
+    <select name="userId"> <!--- i dont think this is right -->
+        <option value=""> -- </option>
+        <option th:each="user : ${users}"
+                th:value="${user.id}"
+                th:text="${user.firstName}"/>
+    </select>
+
+    <br />
+    <input type="submit" value="Submit" />
+
+</form></div>
+
+</body>
+</html>

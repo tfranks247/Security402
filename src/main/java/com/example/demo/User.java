@@ -35,6 +35,21 @@ public class User {
         inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Collection<Role> roles;
 
+
+
+    // CHECK
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "department_id")
+    private Department departments;
+
+    public Department getDepartments() {
+        return departments;
+    }
+
+    public void setDepartments(Department departments) {
+        this.departments = departments;
+    }
+
     public long getId() {
         return id;
     }

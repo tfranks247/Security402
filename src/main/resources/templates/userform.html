@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h2>User Form</h2>
+<div><form action="#" th:action="@{/process}" th:object="${user}" method="post"
+           enctype="multipart/form-data" class="custom">
+    <input type="hidden" th:field="*{id}" />
+    <!--            <input type="hidden" th:field="*{image}" />-->
+    <input type="hidden" th:field="*{id}" />
+    <span th:if="${#fields.hasErrors('id')}"
+          th:errors="*{id}"></span>
+    Email :<input class="form-control" type="text" th:field="*{email}"/>
+    <span th:if="${#fields.hasErrors('name')}"
+          th:errors="*{email}"></span><br />
+    password :<input class="form-control" type="text" th:field="*{password}" />
+    <span th:if="${#fields.hasErrors('password')}"
+          th:errors="*{password}"></span><br />
+    First name :<input class="form-control" type="text" th:field="*{firstName}" />
+    <span th:if="${#fields.hasErrors('firstName')}"
+          th:errors="*{firstName}"></span><br />
+    Last name :<input class="form-control" type="text" th:field="*{lastName}" />
+    <span th:if="${#fields.hasErrors('lastName')}"
+          th:errors="*{lastName}"></span><br />
+    Username :<input class="form-control" type="text" th:field="*{username}" />
+    <span th:if="${#fields.hasErrors('username')}"
+          th:errors="*{firstName}"></span><br />
+
+    Department:
+    <select name="departmentId"> <!--- i dont think this is right -->
+        <option value=""> -- </option>
+        <option th:each="department : ${departments}"
+                th:value="${department.id}"
+                th:text="${department.name}"/>
+    </select>
+
+    <br />
+    <input type="submit" value="Submit" />
+
+</form></div>
+
+</body>
+</html>
+</body>
+</html>
