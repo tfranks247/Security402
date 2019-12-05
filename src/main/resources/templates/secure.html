@@ -5,11 +5,16 @@
     <title>Title</title>
 </head>
 <body>
+<div th:replace="base :: navlinks"></div>
+
 <h3>Secure Page</h3>
 <a href="/logout">logout</a>
 <h4>email</h4>
 <p th:text="${user.email}"></p><br/>
 <h4>last name</h4>
 <p th:text="${user.lastName}"></p>
+
+<a href="/add">Add a department</a>
+<a href="/addUser">Add a User</a>
 </body>
 </html>

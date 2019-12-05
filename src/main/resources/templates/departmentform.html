@@ -7,7 +7,7 @@
 <body>
 
 <h2>Department Form</h2>
-<div><form action="#" th:action="@{/process}" th:object="${department}" method="post"
+<div><form action="#" th:action="@{/processDepartment}" th:object="${department}" method="post"
            enctype="multipart/form-data" class="custom">
     <input type="hidden" th:field="*{id}" />
     <!--            <input type="hidden" th:field="*{image}" />-->
@@ -24,13 +24,13 @@
     <span th:if="${#fields.hasErrors('location')}"
           th:errors="*{location}"></span><br />
 
-    User:
-    <select name="userId"> <!--- i dont think this is right -->
-        <option value=""> -- </option>
-        <option th:each="user : ${users}"
-                th:value="${user.id}"
-                th:text="${user.firstName}"/>
-    </select>
+<!--    User:-->
+<!--    <select name="userId"> &lt;!&ndash;- i dont think this is right &ndash;&gt;-->
+<!--        <option value=""> &#45;&#45; </option>-->
+<!--        <option th:each="user : ${users}"-->
+<!--                th:value="${user.id}"-->
+<!--                th:text="${user.firstName}"/>-->
+<!--    </select>-->
 
     <br />
     <input type="submit" value="Submit" />

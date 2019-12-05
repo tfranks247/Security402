@@ -1,14 +1,18 @@
 package com.example.demo;
 
+import com.cloudinary.utils.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.io.IOException;
 import java.security.Principal;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 @Controller
@@ -20,29 +24,40 @@ public class HomeController {
     @Autowired
     private DepartmentRepository departmentRepository;
 
+    @Autowired
+    CloudinaryConfig cloudc;
+
     @GetMapping("/register")
     public String showRegistrationPage(Model model) {
         model.addAttribute("user", new User());
         return "registration";
     }
 
-    @PostMapping("/register")
-    public String processRegistrationPage(@Valid
-                                          @ModelAttribute("user") User user, BindingResult result,
-                                          Model model) {
-        model.addAttribute("user", user);
-        if (result.hasErrors()) {
-            return "registration";
-        } else {
-            userService.saveUser(user);
-            model.addAttribute("message", "User Account Created");
-        }
-        return "index";
-    }
+//    @PostMapping("/register")
+//    public String processRegistrationPage(@Valid
+//                                          @ModelAttribute("user") User user, BindingResult result,
+//                                          Model model) {
+//        model.addAttribute("user", user);
+//        if (result.hasErrors()) {
+//            return "registration";
+//        } else {
+//            userService.saveUser(user);
+//            model.addAttribute("message", "User Account Created");
+//        }
+//        return "index";
+//    }
 
     @RequestMapping("/")
-    public String index(){
-        return "index";
+    public String index(Model model){
+        model.addAttribute("departments", departmentRepository.findAll());
+        model.addAttribute("users", userRepository.findAll());
+        return "list";
+    }
+
+    @PostMapping("/searchlist")
+    public String search(Model model, @RequestParam("search")String search){
+        model.addAttribute("departments", departmentRepository.findByNameContainingAndLocationContainingAndAndIndustryContaining(search, search, search));
+        return "searchlist";
     }
     @RequestMapping("/login")
     public String login(){
@@ -72,21 +87,41 @@ public class HomeController {
     }
 
     @PostMapping("/process")
-    public String processForm(@ModelAttribute Department department, @RequestParam("userId") long id){
+    public String processForm(@ModelAttribute User user, @RequestParam("userId") long id, @RequestParam("file")MultipartFile file){
 
-        User user = userRepository.findById(id).get();
+        Department department1 = departmentRepository.findById(id).get();
+        user.setDepartments(department1);
+        if(file.isEmpty() && user.getImage() == null){
+            return "redirect:/add";
+        }
+        if(!file.isEmpty()){
+            try {
+                Map uploadResult = cloudc.upload(file.getBytes(),
+                        ObjectUtils.asMap("resourcetype", "auto"));
+                user.setImage(uploadResult.get("url").toString());
+                userRepository.save(user);
+
+            } catch (IOException e){
+                e.printStackTrace();
+                return "redirect:/add";
+            }
+        }
+        else {
+            userRepository.save(user);
+//            return "redirect:/";
+        }
 
         Set<User> userList;
 
-        if (department.users != null){
-            userList = new HashSet<>(department.users);
+        if (department1.users != null){
+            userList = new HashSet<>(department1.users);
         }
         else {
             userList = new HashSet<>();
         }
         userList.add(user);
-        department.setUsers(userList);
-        departmentRepository.save(department);
+        department1.setUsers(userList);
+        departmentRepository.save(department1);
         return "redirect:/";
     }
 
@@ -105,7 +140,8 @@ public class HomeController {
         return "departmentform";
     }
 
-    @RequestMapping("/delete/department/{id}")
+    @RequestMapping("/delete/department/{id}") // must delete connections from the other places where connections
+    //
     public String delDepartment(@PathVariable("id") long id){
         departmentRepository.deleteById(id);
         return "redirect:/";
@@ -119,13 +155,13 @@ public class HomeController {
         return "userform";
     }
 
-    @PostMapping("/processUser")
-    public String processForm(@Valid User user,
+    @PostMapping("/processDepartment")
+    public String processForm(@Valid Department department,
                               BindingResult result){
         if (result.hasErrors()){
-            return "userform";
+            return "departmentform";
         }
-        userRepository.save(user);
+        departmentRepository.save(department);
         return "redirect:/";
     }
 

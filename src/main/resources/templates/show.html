@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<div th:replace="base :: navlinks"></div>
+
+<a href="/">Show All Departments</a>
+Name :<span th:text="${department.name}"></span><br/>
+Industry :<span th:text="${department.industry}"></span><br/>
+Location :<span th:text="${department.location}"></span><br/>
+
+<a th:href="@{/delete/department/{id}(id=${department.id})}">Delete this Department</a>
+
+<a href="/">Show All Users</a>
+<div th:each="user : ${department.users}">
+Email :<span th:text="${user.email}"></span><br/>
+First Name :<span th:text="${user.firstName}"></span><br/>
+Last Name :<span th:text="${user.lastName}"></span><br/>
+Username :<span th:text="${user.username}"></span><br/>
+<a th:href="@{/delete/{id}(id=${user.id})}">Delete this User</a>
+
+</div>
+
+</body>
+</html>

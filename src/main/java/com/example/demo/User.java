@@ -12,6 +12,8 @@ public class User {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
+    private String image;
+
     @Column(name = "email", nullable = false)
     private String email;
 
@@ -38,7 +40,7 @@ public class User {
 
 
     // CHECK
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "department_id")
     private Department departments;
 
@@ -128,5 +130,13 @@ public class User {
         this.setEnabled(enabled);
         this.setUsername(username);
 
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 }

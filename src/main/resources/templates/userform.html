@@ -12,16 +12,19 @@
     <title>Title</title>
 </head>
 <body>
+
+<div th:replace="base :: navlinks"></div>
+
 <h2>User Form</h2>
 <div><form action="#" th:action="@{/process}" th:object="${user}" method="post"
            enctype="multipart/form-data" class="custom">
     <input type="hidden" th:field="*{id}" />
-    <!--            <input type="hidden" th:field="*{image}" />-->
+    <input type="hidden" th:field="*{image}" />
     <input type="hidden" th:field="*{id}" />
     <span th:if="${#fields.hasErrors('id')}"
           th:errors="*{id}"></span>
     Email :<input class="form-control" type="text" th:field="*{email}"/>
-    <span th:if="${#fields.hasErrors('name')}"
+    <span th:if="${#fields.hasErrors('email')}"
           th:errors="*{email}"></span><br />
     password :<input class="form-control" type="text" th:field="*{password}" />
     <span th:if="${#fields.hasErrors('password')}"
@@ -37,12 +40,14 @@
           th:errors="*{firstName}"></span><br />
 
     Department:
-    <select name="departmentId"> <!--- i dont think this is right -->
+    <select name="userId"> <!--- i dont think this is right -->
         <option value=""> -- </option>
         <option th:each="department : ${departments}"
                 th:value="${department.id}"
                 th:text="${department.name}"/>
     </select>
+
+    Image: <input type="file" name="file"/>
 
     <br />
     <input type="submit" value="Submit" />
